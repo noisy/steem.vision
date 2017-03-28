@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { WhistleService } from '../whistle/whistle.service';
+
 import { Poll } from './poll';
+import { PollOption } from './polloption';
 import { Post } from '../whistle/post';
+import { WhistleService } from '../whistle/whistle.service';
 
 @Injectable()
 export class PollService {
@@ -14,9 +16,13 @@ export class PollService {
     });
   }
 
-  fetchOptions(post: Post): Promise<Post[]> {
+  fetchOptions(post: Post): Promise<PollOption[]> {
     return post.getReplies().then((replies: Post[]) => {
-      return replies.filter((reply: Post) => reply.author === post.author);
+      return replies
+        .filter((reply: Post) => reply.author === post.author)
+        .map((reply: Post) => {
+          return new PollOption(reply);
+        });
     });
   }
 }

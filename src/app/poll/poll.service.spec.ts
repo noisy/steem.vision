@@ -2,6 +2,7 @@ import { TestBed, async, inject } from '@angular/core/testing';
 import { PollService } from './poll.service';
 import { WhistleService } from '../whistle/whistle.service';
 import { Post } from '../whistle/post';
+import { PollOption } from './polloption';
 
 describe('PollService', () => {
 
@@ -85,11 +86,26 @@ describe('PollService', () => {
         }),
       ];
 
+      let expectedResponse = [
+        new PollOption(new Post(whistleService, {
+          author: 'author',
+          permlink: 'permlink-1',
+          title: 'title-1',
+          body: 'body1',
+        })),
+        new PollOption(new Post(whistleService, {
+          author: 'author',
+          permlink: 'permlink-2',
+          title: 'title-2',
+          body: 'body2',
+        })),
+      ];
+
       let spy = spyOn(whistleService, 'getReplies').and.returnValue(Promise.resolve(response));
 
       pollService.fetchOptions(post).then((posts) => {
         expect(spy.calls.count()).toEqual(1);
-        expect(posts).toEqual(response);
+        expect(posts).toEqual(expectedResponse);
       });
     }
   )));
@@ -130,7 +146,7 @@ describe('PollService', () => {
 
       pollService.fetchOptions(post).then((posts) => {
         expect(spy.calls.count()).toEqual(1);
-        expect(posts).toEqual([response[0], response[1]]);
+        expect(posts).toEqual([new PollOption(response[0]), new PollOption(response[1])]);
       });
     }
   )));
