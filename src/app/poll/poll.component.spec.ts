@@ -1,4 +1,4 @@
-import { DashboardComponent } from './dashboard.component';
+import { PollComponent } from './poll.component';
 
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By }           from '@angular/platform-browser';
@@ -6,26 +6,39 @@ import { DebugElement } from '@angular/core';
 import { PollService } from '../poll/poll.service';
 import { WhistleService } from '../whistle/whistle.service';
 
+import { ActivatedRoute, Data } from '@angular/router';
 
-describe('DashbordComponent', function () {
+describe('PollComponent', function () {
   let de: DebugElement;
-  let comp: DashboardComponent;
-  let fixture: ComponentFixture<DashboardComponent>;
+  let comp: PollComponent;
+  let fixture: ComponentFixture<PollComponent>;
   let pollService: PollService;
   let spy: any;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DashboardComponent ],
+      declarations: [ PollComponent ],
       providers: [
         PollService,
         { provide: WhistleService, useValue: {}},
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: {
+              subscribe: (fn: (value: Data) => void) => fn({
+                author: 'luke',
+                permlink: 'force'
+              })
+            }
+          }
+        }
       ]
     }).compileComponents();
   }));
 
+
   beforeEach(() => {
-    fixture = TestBed.createComponent(DashboardComponent);
+    fixture = TestBed.createComponent(PollComponent);
     comp = fixture.componentInstance;
 
     pollService = fixture.debugElement.injector.get(PollService);
@@ -36,9 +49,9 @@ describe('DashbordComponent', function () {
 
   it('should create component', () => expect(comp).toBeDefined() );
 
-  it('should have expected <h1> text', () => {
-    fixture.detectChanges();
-    const h1 = de.nativeElement;
-    expect(h1.innerText).toContain('test');
-  });
+  // it('should have expected <h1> text', () => {
+  //   fixture.detectChanges();
+  //   const h1 = de.nativeElement;
+  //   expect(h1.innerText).toContain('test');
+  // });
 });

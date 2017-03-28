@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { WhistleService } from './whistle/whistle.service';
 import { SteemService } from './whistle/steem.service';
+import { PollComponent } from './poll/poll.component';
 
 @NgModule({
   imports: [
@@ -19,12 +20,17 @@ import { SteemService } from './whistle/steem.service';
       {
         path: 'dashboard',
         component: DashboardComponent
-      }
+      },
+      {
+        path: 'poll/:author/:permlink',
+        component: PollComponent
+      },
     ])
   ],
   declarations: [
     AppComponent,
     DashboardComponent,
+    PollComponent,
   ],
   providers:    [
     WhistleService,

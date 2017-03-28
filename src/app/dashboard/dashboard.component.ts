@@ -8,12 +8,13 @@ import { PollService } from '../poll/poll.service';
     <h1>test</h1>
     <h2>Polls:</h2>
     <div *ngFor="let poll of polls">
-      {{poll.title}}
+      <!--<a [routerLink]="['/poll', poll.author, poll.permlink]">{{poll.title}}</a>-->
+      <p>{{poll.title}}</p>
     </div>
   `,
   providers: [
     PollService
-  ]
+  ],
 })
 export class DashboardComponent implements OnInit {
   polls: Poll[];

@@ -1,8 +1,9 @@
 import { TestBed, async, inject } from '@angular/core/testing';
 import { PollService } from './poll.service';
 import { WhistleService } from '../whistle/whistle.service';
-import { Post } from '../whistle/post';
+import { Poll } from './poll';
 import { PollOption } from './polloption';
+import { Post } from '../whistle/post';
 
 describe('PollService', () => {
 
@@ -25,7 +26,25 @@ describe('PollService', () => {
     expect(pollService).toBeDefined();
   }));
 
-  //
+  it('should has getPoll method', async(inject(
+    [WhistleService, PollService],
+    (whistleService: WhistleService, pollService: PollService) => {
+
+      let expectedResponse = {
+        author: 'author',
+        permlink: 'permlink',
+        title: 'title',
+        body: 'body',
+      };
+
+      let spy = spyOn(whistleService, 'getPost').and.returnValue(Promise.resolve(expectedResponse));
+
+      pollService.getPoll('author', 'permlink').then(poll => {
+        expect(poll).toEqual(new Poll(new Post(whistleService, expectedResponse)));
+      });
+    }
+  )));
+
   xit('should has getPolls method', async(inject(
     [WhistleService, PollService],
     (whistleService: WhistleService, pollService: PollService) => {
@@ -43,20 +62,6 @@ describe('PollService', () => {
           // half ready
           expect(1).toBe(2);
         });
-  //
-  //     let expectedResponse = {
-  //       author: 'noisy',
-  //       permlink: 'harry-potter-7',
-  //       title: 'Review of Harry Potter Deathly Hallows',
-  //       body: 'Review ...'
-  //     };
-  //
-
-  //
-  //     whistleService.getPost('noisy', 'permlink').then((response) => {
-  //       expect(spy.calls.count()).toEqual(1);
-  //       expect(response).toEqual(new Post(whistleService, expectedResponse));
-  //     });
     }
   )));
 
