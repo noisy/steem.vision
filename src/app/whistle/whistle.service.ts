@@ -14,4 +14,11 @@ export class WhistleService {
         return new Post(this, rawPost);
       });
   }
+
+  getReplies(author: string, permlink: string): Promise<Post[]> {
+    return this.steemService.api.getContentReplies(author, permlink)
+      .then((rawPosts: any[]) => {
+        return rawPosts.map((rawPost: any) => new Post(this, rawPost));
+      });
+  }
 }

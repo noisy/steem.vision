@@ -12,4 +12,8 @@ export class Post {
     this.title = json.title;
     this.body = json.body;
   }
+
+  getReplies(): Promise<Post[]> {
+    return this.whistleService.getReplies(this.author, this.permlink);
+  }
 }

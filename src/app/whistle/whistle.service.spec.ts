@@ -9,6 +9,7 @@ describe('WhistleService', () => {
   class SteemServiceStub {
     api = {
       getContent: () => {},
+      getContentReplies: () => {},
     };
   }
 
@@ -43,6 +44,61 @@ describe('WhistleService', () => {
       whistleService.getPost('noisy', 'permlink').then((response) => {
         expect(spy.calls.count()).toEqual(1);
         expect(response).toEqual(new Post(whistleService, expectedResponse));
+      });
+    }
+  )));
+
+
+  it('should has getReplies method which return Promise<Post[]>', async(inject(
+    [WhistleService, SteemService],
+    (whistleService: WhistleService, steemService: SteemService) => {
+      let rawPosts = [
+        {
+          author: 'author',
+          permlink: 'permlink-1',
+          title: 'title-1',
+          body: 'body1',
+        },
+        {
+          author: 'author',
+          permlink: 'permlink-2',
+          title: 'title-2',
+          body: 'body2',
+        },
+        {
+          author: 'author2',
+          permlink: 'permlink-3',
+          title: 'title-3',
+          body: 'body3',
+        }
+      ];
+
+      let expectedResponse = [
+        new Post(whistleService, {
+          author: 'author',
+          permlink: 'permlink-1',
+          title: 'title-1',
+          body: 'body1',
+        }),
+        new Post(whistleService, {
+          author: 'author',
+          permlink: 'permlink-2',
+          title: 'title-2',
+          body: 'body2',
+        }),
+        new Post(whistleService, {
+          author: 'author2',
+          permlink: 'permlink-3',
+          title: 'title-3',
+          body: 'body3',
+        })
+      ];
+
+      let spy = spyOn(steemService.api, 'getContentReplies').and.returnValue(Promise.resolve(rawPosts));
+
+      whistleService.getReplies('author', 'permlink').then((posts) => {
+        expect(spy.calls.count()).toEqual(1);
+        expect(posts).toEqual(expectedResponse);
       });
     }
   )));
