@@ -2,7 +2,7 @@ import { TestBed, async, inject } from '@angular/core/testing';
 
 import { WhistleService } from './whistle.service';
 import { SteemService} from './steem.service';
-import { Post } from './post';
+import { ISteemPost, Post } from './post';
 import { ISteemVote, Vote } from './vote';
 
 describe('WhistleService', () => {
@@ -33,11 +33,12 @@ describe('WhistleService', () => {
     [WhistleService, SteemService],
     (whistleService: WhistleService, steemService: SteemService) => {
 
-      let expectedResponse = {
+      let expectedResponse: ISteemPost = {
         author: 'noisy',
         permlink: 'harry-potter-7',
         title: 'Review of Harry Potter Deathly Hallows',
-        body: 'Review ...'
+        body: 'Review ...',
+        active_votes: [],
       };
 
       let spy = spyOn(steemService.api, 'getContent').and.returnValue(Promise.resolve(expectedResponse));
@@ -52,24 +53,27 @@ describe('WhistleService', () => {
   it('should has getReplies method which return Promise<Post[]>', async(inject(
     [WhistleService, SteemService],
     (whistleService: WhistleService, steemService: SteemService) => {
-      let rawPosts = [
+      let rawPosts: ISteemPost[] = [
         {
           author: 'author',
           permlink: 'permlink-1',
           title: 'title-1',
           body: 'body1',
+          active_votes: [],
         },
         {
           author: 'author',
           permlink: 'permlink-2',
           title: 'title-2',
           body: 'body2',
+          active_votes: [],
         },
         {
           author: 'author2',
           permlink: 'permlink-3',
           title: 'title-3',
           body: 'body3',
+          active_votes: [],
         }
       ];
 
@@ -79,18 +83,21 @@ describe('WhistleService', () => {
           permlink: 'permlink-1',
           title: 'title-1',
           body: 'body1',
+          active_votes: [],
         }),
         Post.create(whistleService, {
           author: 'author',
           permlink: 'permlink-2',
           title: 'title-2',
           body: 'body2',
+          active_votes: [],
         }),
         Post.create(whistleService, {
           author: 'author2',
           permlink: 'permlink-3',
           title: 'title-3',
           body: 'body3',
+          active_votes: [],
         })
       ];
 
@@ -152,5 +159,4 @@ describe('WhistleService', () => {
       });
     }
   )));
-
 });
