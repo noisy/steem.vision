@@ -41,9 +41,9 @@ describe('DashbordComponent', function () {
 
   it('should create component', () => expect(comp).toBeDefined() );
 
-  it('should have expected <h1> text', () => {
+  it('should have expected <h1> Polls', () => {
     fixture.detectChanges();
     const h1 = de.nativeElement;
-    expect(h1.innerText).toContain('test');
+    expect(h1.innerText).toContain('Polls');
   });
 });
