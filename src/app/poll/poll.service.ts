@@ -4,6 +4,7 @@ import { Poll } from './poll';
 import { PollOption } from './polloption';
 import { Post } from '../whistle/post';
 import { WhistleService } from '../whistle/whistle.service';
+import { PollConfig } from './pollconfig';
 
 @Injectable()
 export class PollService {
@@ -20,7 +21,14 @@ export class PollService {
     });
   }
 
-  getChoices(author: string, permlink: string): Promise<PollOption[]> {
-    return this.whistleService.getReplies(author, permlink);
+  getChoices(author: string, permlink: string, config: PollConfig): Promise<PollOption[]> {
+    return this.whistleService.getReplies(author, permlink).then((posts: Post[]) => {
+
+      if (!config.addingChoicesAllowed) {
+        posts = posts.filter(post => post.author === author);
+      }
+      return posts.map(post => new PollOption(post));
+
+    });
   }
 }

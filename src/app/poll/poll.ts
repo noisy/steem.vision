@@ -23,7 +23,7 @@ export class Poll extends Post {
   }
 
   getChoices(): Promise<PollOption[]> {
-    return this.pollService.getChoices(this.author, this.permlink);
+    return this.pollService.getChoices(this.author, this.permlink, this.config);
   }
 
   private _loadConfig(): void {
