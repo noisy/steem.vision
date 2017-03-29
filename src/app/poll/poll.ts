@@ -7,5 +7,4 @@ export class Poll extends Post {
   constructor(post: IPost) {
     super(post);
   }
-  }
 }

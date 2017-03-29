@@ -2,11 +2,13 @@ import { TestBed, async, inject } from '@angular/core/testing';
 
 import { WhistleService } from './whistle.service';
 import { Post } from './post';
+import { Vote } from './vote';
 
 describe('Post', () => {
 
   class WhistleServiceStub {
     getReplies = () => {};
+    getVotes = () => {};
   }
 
   beforeEach( async(() => {
@@ -58,6 +60,45 @@ describe('Post', () => {
         expect(posts).toEqual(expectedResponse);
       });
 
+    }
+  )));
+
+  it('should has getVotes method which return Promise<Vote[]>', async(inject(
+    [WhistleService],
+    (whistleService: WhistleService) => {
+
+      let post = Post.create(whistleService, {
+        author: 'author',
+        permlink: 'permlink',
+        title: 'title',
+        body: 'body',
+      });
+
+      let response: Vote[] = [
+        {
+          percent: 10000,
+          reputation: '1234567',
+          rshares: '1234567',
+          time: '2017-03-21T17:53:48',
+          voter: 'noisy',
+          weight: '1234567',
+        },
+        {
+          percent: 8000,
+          reputation: '1234567',
+          rshares: '1234567',
+          time: '2017-03-21T18:53:48',
+          voter: 'noisy2',
+          weight: '1234567',
+        },
+      ];
+
+      let spy = spyOn(whistleService, 'getVotes').and.returnValue(Promise.resolve(response));
+
+      post.getVotes().then((votes: Vote[]) => {
+        expect(spy.calls.count()).toEqual(1);
+        expect(votes).toEqual(response);
+      });
     }
   )));
 

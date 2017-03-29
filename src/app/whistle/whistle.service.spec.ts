@@ -3,6 +3,7 @@ import { TestBed, async, inject } from '@angular/core/testing';
 import { WhistleService } from './whistle.service';
 import { SteemService} from './steem.service';
 import { Post } from './post';
+import { ISteemVote, Vote } from './vote';
 
 describe('WhistleService', () => {
 
@@ -10,18 +11,18 @@ describe('WhistleService', () => {
     api = {
       getContent: () => {},
       getContentReplies: () => {},
+      getActiveVotes: () => {},
     };
   }
 
-  beforeEach( async(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ ],
       providers: [
         WhistleService,
         { provide: SteemService, useClass: SteemServiceStub}
       ]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   it('should be injectable', inject([WhistleService], (whistleService: WhistleService) => {
@@ -47,7 +48,6 @@ describe('WhistleService', () => {
       });
     }
   )));
-
 
   it('should has getReplies method which return Promise<Post[]>', async(inject(
     [WhistleService, SteemService],
@@ -99,6 +99,56 @@ describe('WhistleService', () => {
       whistleService.getReplies('author', 'permlink').then((posts) => {
         expect(spy.calls.count()).toEqual(1);
         expect(posts).toEqual(expectedResponse);
+      });
+    }
+  )));
+
+  it('should has getVotes method which return Promise<Vote[]>', async(inject(
+    [WhistleService, SteemService],
+    (whistleService: WhistleService, steemService: SteemService) => {
+      let rawVotes: ISteemVote[] = [
+        {
+          percent: 10000,
+          reputation: '1234567',
+          rshares: '1234567',
+          time: '2017-03-21T17:53:48',
+          voter: 'noisy',
+          weight: '1234567',
+        },
+        {
+          percent: 8000,
+          reputation: '1234567',
+          rshares: '1234567',
+          time: '2017-03-21T18:53:48',
+          voter: 'noisy2',
+          weight: '1234567',
+        },
+      ];
+
+      let expectedResponse: Vote[] = [
+        {
+          percent: 10000,
+          reputation: '1234567',
+          rshares: '1234567',
+          time: '2017-03-21T17:53:48',
+          voter: 'noisy',
+          weight: '1234567',
+        },
+        {
+          percent: 8000,
+          reputation: '1234567',
+          rshares: '1234567',
+          time: '2017-03-21T18:53:48',
+          voter: 'noisy2',
+          weight: '1234567',
+        },
+      ];
+
+      let spy = spyOn(steemService.api, 'getActiveVotes').and.returnValue(Promise.resolve(rawVotes));
+
+      whistleService.getVotes('author', 'permlink').then((votes: Vote[]) => {
+        expect(spy.calls.count()).toEqual(1);
+        expect(votes).toEqual(expectedResponse);
       });
     }
   )));

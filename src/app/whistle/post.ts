@@ -1,6 +1,14 @@
 import { WhistleService } from './whistle.service';
+import { Vote } from './vote';
 
-export interface IPost {
+export interface ISteemPost {
+  author: string;
+  permlink: string;
+  title: string;
+  body: string;
+}
+
+export interface IPost extends ISteemPost {
   whistleService: WhistleService;
   author: string;
   permlink: string;
@@ -16,13 +24,13 @@ export class Post {
   title: string;
   body: string;
 
-  static create(whistleService: WhistleService, json: any) {
+  static create(whistleService: WhistleService, steemPost: ISteemPost) {
     let post: IPost = {
       whistleService: whistleService,
-      author: json.author,
-      permlink: json.permlink,
-      title: json.title,
-      body: json.body,
+      author: steemPost.author,
+      permlink: steemPost.permlink,
+      title: steemPost.title,
+      body: steemPost.body,
     };
     return new Post(post);
   }
@@ -37,5 +45,9 @@ export class Post {
 
   getReplies(): Promise<Post[]> {
     return this.whistleService.getReplies(this.author, this.permlink);
+  }
+
+  getVotes(): Promise<Vote[]> {
+    return this.whistleService.getVotes(this.author, this.permlink);
   }
 }
