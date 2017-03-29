@@ -16,9 +16,22 @@ export class PollService {
   }
 
   getPolls(): Promise<Poll[]> {
-    return this.whistleService.getPost('noisy2', 'test').then((post: Post) => {
-      return [Poll.createPoll(this, post)];
+
+    let pollsData: any[] = [
+      {author: 'clayop', permlink: 'poll-your-opinions-on-hardfork-17-features'},
+      {author: 'clayop', permlink: 'voting-test-do-you-think-changing-to-a-flattened-curve-is-urgent'},
+      {author: 'noisy2', permlink: 'test'},
+    ];
+
+    let polls: Poll[] = [];
+
+    let promises: Promise<Poll>[] = pollsData.map(pollData => {
+      return this.whistleService.getPost(pollData.author, pollData.permlink).then((post: Post) => {
+        polls.push(Poll.createPoll(this, post));
+      });
     });
+
+    return Promise.all(promises).then(() => polls);
   }
 
   getChoices(author: string, permlink: string, config: PollConfig): Promise<PollOption[]> {
