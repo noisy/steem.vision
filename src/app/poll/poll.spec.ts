@@ -4,6 +4,7 @@ import { Poll } from './poll';
 import { WhistleService } from '../whistle/whistle.service';
 import { PollOption } from './polloption';
 import { PollService } from './poll.service';
+import { Post } from '../whistle/post';
 
 describe('Poll', () => {
 
@@ -26,37 +27,42 @@ describe('Poll', () => {
     }).compileComponents();
   }));
 
-  // it('should has getChoices method', async(inject(
-  //   [WhistleService, PollServiceStub],
-  //   (whistleService: WhistleService, pollService: PollService) => {
-  //
-  //     let poll: Poll = new Poll({
-  //       whistleService: whistleService,
-  //       author: 'author',
-  //       permlink: 'permlink',
-  //       title: 'title',
-  //       body: 'body',
-  //       active_votes: [],
-  //     });
-  //
-  //     let expectedResponse: PollOption[] = [
-  //     ];
-  //
-  //     let spy = spyOn(pollService, 'getChoices').and.returnValue(Promise.resolve(expectedResponse));
-  //
-  //     poll.getChoices().then((choices: PollOption[]) => {
-  //       expect(choices).toEqual(expectedResponse);
-  //     });
-  //
-  //   }
-  // )));
+  it('should has getChoices method', async(inject(
+    [WhistleService, PollService],
+    (whistleService: WhistleService, pollService: PollService) => {
 
+      let post = Post.create(whistleService, {
+        author: 'author',
+        permlink: 'permlink',
+        title: 'title',
+        body: 'body',
+        active_votes: [],
+        json_metadata: '{"poll_config": {"adding_choices_allowed": true}}',
+      });
+      let poll = Poll.createPoll(pollService, post);
 
-  // it('can be constructed from Post and its comments', () => {
-  //
-  //   class WhistleServiceStub {
-  //     test = 'test';
-  //   }
-  // });
+      let expectedResponse: PollOption[] = [];
 
+      let spy = spyOn(pollService, 'getChoices').and.returnValue(Promise.resolve(expectedResponse));
+
+      poll.getChoices().then((choices: PollOption[]) => {
+        expect(choices).toEqual(expectedResponse);
+      });
+    }
+  )));
+
+  it('has pollConfig loaded from json_metadata', inject(
+    [WhistleService, PollService],
+    (whistleService: WhistleService, pollService: PollService) => {
+      let post: Post = Post.create(whistleService, {
+        author: 'author',
+        permlink: 'permlink',
+        title: 'title',
+        body: 'body',
+        active_votes: [],
+        json_metadata: '{"poll_config": {"adding_choices_allowed": true}}',
+      });
+      let poll = Poll.createPoll(pollService, post);
+      expect(poll.config).toEqual({addingChoicesAllowed: true});
+  }));
 });

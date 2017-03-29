@@ -11,11 +11,11 @@ export class PollService {
   constructor(private whistleService: WhistleService) {}
 
   getPoll(author: string, permlink: string): Promise<Poll> {
-    return this.whistleService.getPost(author, permlink).then(post => Poll.createPoll(this, post));
+    return this.whistleService.getPost(author, permlink).then((post: Post) => Poll.createPoll(this, post));
   }
 
   getPolls(): Promise<Poll[]> {
-    return this.whistleService.getPost('noisy2', 'test').then( post => {
+    return this.whistleService.getPost('noisy2', 'test').then((post: Post) => {
       return [Poll.createPoll(this, post)];
     });
   }

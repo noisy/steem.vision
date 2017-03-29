@@ -34,11 +34,12 @@ describe('PollService', () => {
         permlink: 'permlink',
         title: 'title',
         body: 'body',
-        active_votes: []
+        active_votes: [],
+        json_metadata: '{"poll_config": {"adding_choices_allowed": true}}',
       });
       let expectedResponse: Poll = Poll.createPoll(pollService, post);
 
-      let spy = spyOn(whistleService, 'getPost').and.returnValue(Promise.resolve(Post.create(whistleService, expectedResponse)));
+      let spy = spyOn(whistleService, 'getPost').and.returnValue(Promise.resolve(expectedResponse));
 
       pollService.getPoll('author', 'permlink').then(poll => {
         expect(poll).toEqual(expectedResponse);

@@ -31,6 +31,7 @@ describe('Post', () => {
           title: 'title',
           body: 'body',
           active_votes: [],
+          json_metadata: '{}',
         });
 
       let expectedResponse = [
@@ -40,6 +41,7 @@ describe('Post', () => {
           title: 'title-1',
           body: 'body1',
           active_votes: [],
+          json_metadata: '{}',
         }),
         Post.create(whistleService, {
           author: 'author',
@@ -47,6 +49,7 @@ describe('Post', () => {
           title: 'title-2',
           body: 'body2',
           active_votes: [],
+          json_metadata: '{}',
         }),
         Post.create(whistleService, {
           author: 'author2',
@@ -54,6 +57,7 @@ describe('Post', () => {
           title: 'title-3',
           body: 'body3',
           active_votes: [],
+          json_metadata: '{}',
         })
       ];
 
@@ -77,6 +81,7 @@ describe('Post', () => {
         title: 'title',
         body: 'body',
         active_votes: [],
+        json_metadata: '{}',
       });
 
       let response: Vote[] = [

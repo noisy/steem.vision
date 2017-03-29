@@ -39,6 +39,7 @@ describe('WhistleService', () => {
         title: 'Review of Harry Potter Deathly Hallows',
         body: 'Review ...',
         active_votes: [],
+        json_metadata: '{}',
       };
 
       let spy = spyOn(steemService.api, 'getContent').and.returnValue(Promise.resolve(expectedResponse));
@@ -60,6 +61,7 @@ describe('WhistleService', () => {
           title: 'title-1',
           body: 'body1',
           active_votes: [],
+          json_metadata: '{}',
         },
         {
           author: 'author',
@@ -67,6 +69,7 @@ describe('WhistleService', () => {
           title: 'title-2',
           body: 'body2',
           active_votes: [],
+          json_metadata: '{}',
         },
         {
           author: 'author2',
@@ -74,6 +77,7 @@ describe('WhistleService', () => {
           title: 'title-3',
           body: 'body3',
           active_votes: [],
+          json_metadata: '{}',
         }
       ];
 
@@ -84,6 +88,7 @@ describe('WhistleService', () => {
           title: 'title-1',
           body: 'body1',
           active_votes: [],
+          json_metadata: '{}',
         }),
         Post.create(whistleService, {
           author: 'author',
@@ -91,6 +96,7 @@ describe('WhistleService', () => {
           title: 'title-2',
           body: 'body2',
           active_votes: [],
+          json_metadata: '{}',
         }),
         Post.create(whistleService, {
           author: 'author2',
@@ -98,6 +104,7 @@ describe('WhistleService', () => {
           title: 'title-3',
           body: 'body3',
           active_votes: [],
+          json_metadata: '{}',
         })
       ];
 
