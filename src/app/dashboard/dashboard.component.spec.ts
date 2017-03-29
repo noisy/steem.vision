@@ -2,9 +2,10 @@ import { DashboardComponent } from './dashboard.component';
 
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By }           from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { PollService } from '../poll/poll.service';
 import { WhistleService } from '../whistle/whistle.service';
+import { RouterLinkStubDirective } from '../testing/router-stubs';
 
 
 describe('DashbordComponent', function () {
@@ -16,7 +17,11 @@ describe('DashbordComponent', function () {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DashboardComponent ],
+      declarations: [
+        DashboardComponent,
+        RouterLinkStubDirective
+      ],
+      schemas: [ NO_ERRORS_SCHEMA ],
       providers: [
         PollService,
         { provide: WhistleService, useValue: {}},
