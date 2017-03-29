@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 
-
 import { Poll } from '../poll/poll';
 import { PollService } from '../poll/poll.service';
 import { PollOption } from './polloption';
@@ -12,7 +11,7 @@ import { PollOption } from './polloption';
   template: `
     <h1 *ngIf="poll">{{poll.title}}</h1>
     <h3>Options:</h3>
-    <div *ngFor="let option of options">{{option.title}}</div>
+    <div *ngFor="let option of options">{{option.body}} - {{option.active_votes.length}}</div>
   `,
   providers: [
     PollService
@@ -33,10 +32,12 @@ export class PollComponent implements OnInit {
       .switchMap((params: Params) => this.pollService.getPoll(params['author'], params['permlink']))
       .subscribe(poll => {
         this.poll = poll;
-        this.options = [
-          <PollOption>{title: 'option 1'},
-          <PollOption>{title: 'option 2'},
-        ];
+        this.poll.getChoices().then((choices: PollOption[]) => {
+          this.options = choices;
+          this.options.forEach((option: PollOption) => {
+            option.getVotes().then(votes => option.active_votes = votes);
+          });
+        });
       });
   }
 }
