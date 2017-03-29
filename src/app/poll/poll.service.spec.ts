@@ -2,7 +2,6 @@ import { TestBed, async, inject } from '@angular/core/testing';
 import { PollService } from './poll.service';
 import { WhistleService } from '../whistle/whistle.service';
 import { Poll } from './poll';
-import { PollOption } from './polloption';
 import { Post } from '../whistle/post';
 
 describe('PollService', () => {
@@ -30,17 +29,19 @@ describe('PollService', () => {
     [WhistleService, PollService],
     (whistleService: WhistleService, pollService: PollService) => {
 
-      let expectedResponse = {
+      let post = Post.create(whistleService, {
         author: 'author',
         permlink: 'permlink',
         title: 'title',
         body: 'body',
-      };
+        active_votes: []
+      });
+      let expectedResponse: Poll = Poll.createPoll(pollService, post);
 
       let spy = spyOn(whistleService, 'getPost').and.returnValue(Promise.resolve(Post.create(whistleService, expectedResponse)));
 
       pollService.getPoll('author', 'permlink').then(poll => {
-        expect(poll).toEqual(new Poll(Post.create(whistleService, expectedResponse)));
+        expect(poll).toEqual(expectedResponse);
       });
     }
   )));
@@ -64,96 +65,4 @@ describe('PollService', () => {
         });
     }
   )));
-
-  it('should has fetchOptions', async(inject(
-    [WhistleService, PollService],
-    (whistleService: WhistleService, pollService: PollService) => {
-
-      let post = Post.create(whistleService, {
-        author: 'author',
-        permlink: 'permlink',
-        title: 'title',
-        body: 'body',
-      });
-
-      let response = [
-        Post.create(whistleService, {
-          author: 'author',
-          permlink: 'permlink-1',
-          title: 'title-1',
-          body: 'body1',
-        }),
-        Post.create(whistleService, {
-          author: 'author',
-          permlink: 'permlink-2',
-          title: 'title-2',
-          body: 'body2',
-        }),
-      ];
-
-      let expectedResponse = [
-        new PollOption(Post.create(whistleService, {
-          author: 'author',
-          permlink: 'permlink-1',
-          title: 'title-1',
-          body: 'body1',
-        })),
-        new PollOption(Post.create(whistleService, {
-          author: 'author',
-          permlink: 'permlink-2',
-          title: 'title-2',
-          body: 'body2',
-        })),
-      ];
-
-      let spy = spyOn(whistleService, 'getReplies').and.returnValue(Promise.resolve(response));
-
-      pollService.fetchOptions(post).then((posts) => {
-        expect(spy.calls.count()).toEqual(1);
-        expect(posts).toEqual(expectedResponse);
-      });
-    }
-  )));
-
-  it('fetchOptions fetch only options of the same author as post', async(inject(
-    [WhistleService, PollService],
-    (whistleService: WhistleService, pollService: PollService) => {
-
-      let post = Post.create(whistleService, {
-        author: 'author',
-        permlink: 'permlink',
-        title: 'title',
-        body: 'body',
-      });
-
-      let response = [
-        Post.create(whistleService, {
-          author: 'author',
-          permlink: 'permlink-1',
-          title: 'title-1',
-          body: 'body1',
-        }),
-        Post.create(whistleService, {
-          author: 'author',
-          permlink: 'permlink-2',
-          title: 'title-2',
-          body: 'body2',
-        }),
-        Post.create(whistleService, {
-          author: 'author2',
-          permlink: 'permlink-3',
-          title: 'title-3',
-          body: 'body3',
-        })
-      ];
-
-      let spy = spyOn(whistleService, 'getReplies').and.returnValue(Promise.resolve(response));
-
-      pollService.fetchOptions(post).then((posts) => {
-        expect(spy.calls.count()).toEqual(1);
-        expect(posts).toEqual([new PollOption(response[0]), new PollOption(response[1])]);
-      });
-    }
-  )));
-
 });

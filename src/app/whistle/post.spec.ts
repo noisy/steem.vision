@@ -30,6 +30,7 @@ describe('Post', () => {
           permlink: 'permlink',
           title: 'title',
           body: 'body',
+          active_votes: [],
         });
 
       let expectedResponse = [
@@ -38,18 +39,21 @@ describe('Post', () => {
           permlink: 'permlink-1',
           title: 'title-1',
           body: 'body1',
+          active_votes: [],
         }),
         Post.create(whistleService, {
           author: 'author',
           permlink: 'permlink-2',
           title: 'title-2',
           body: 'body2',
+          active_votes: [],
         }),
         Post.create(whistleService, {
           author: 'author2',
           permlink: 'permlink-3',
           title: 'title-3',
           body: 'body3',
+          active_votes: [],
         })
       ];
 
@@ -72,6 +76,7 @@ describe('Post', () => {
         permlink: 'permlink',
         title: 'title',
         body: 'body',
+        active_votes: [],
       });
 
       let response: Vote[] = [

@@ -27,7 +27,7 @@ export class Post {
   body: string;
   active_votes: Vote[];
 
-  static create(whistleService: WhistleService, steemPost: ISteemPost) {
+  static create(whistleService: WhistleService, steemPost: ISteemPost): Post {
     let post: IPost = {
       whistleService: whistleService,
       author: steemPost.author,

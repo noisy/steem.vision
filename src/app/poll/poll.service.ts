@@ -11,22 +11,16 @@ export class PollService {
   constructor(private whistleService: WhistleService) {}
 
   getPoll(author: string, permlink: string): Promise<Poll> {
-    return this.whistleService.getPost(author, permlink).then(post => new Poll(post));
+    return this.whistleService.getPost(author, permlink).then(post => Poll.createPoll(this, post));
   }
 
   getPolls(): Promise<Poll[]> {
     return this.whistleService.getPost('noisy2', 'test').then( post => {
-      return [new Poll(post)];
+      return [Poll.createPoll(this, post)];
     });
   }
 
-  fetchOptions(post: Post): Promise<PollOption[]> {
-    return post.getReplies().then((replies: Post[]) => {
-      return replies
-        .filter((reply: Post) => reply.author === post.author)
-        .map((reply: Post) => {
-          return new PollOption(reply);
-        });
-    });
+  getChoices(author: string, permlink: string): Promise<PollOption[]> {
+    return this.whistleService.getReplies(author, permlink);
   }
 }
