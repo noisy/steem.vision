@@ -5,8 +5,11 @@ import { WhistleService } from '../whistle/whistle.service';
 import { PollOption } from './polloption';
 import { PollService } from './poll.service';
 import { Post } from '../whistle/post';
+import { POLL_CONFIG_JSON_METADATA_NAME, POLL_DEFAULT_CONFIG } from './pollconfig';
 
 describe('Poll', () => {
+
+  let configName = POLL_CONFIG_JSON_METADATA_NAME;
 
   class WhistleServiceStub {
     getPost = () => {};
@@ -60,9 +63,27 @@ describe('Poll', () => {
         title: 'title',
         body: 'body',
         active_votes: [],
-        json_metadata: '{"poll_config": {"adding_choices_allowed": true}}',
+        json_metadata: `{"${configName}": {"adding_choices_allowed": true}}`,
       });
       let poll = Poll.createPoll(pollService, post);
       expect(poll.config).toEqual({addingChoicesAllowed: true});
   }));
+
+
+  it('loads default config if there is no config in Poll metadata', inject(
+    [WhistleService, PollService],
+    (whistleService: WhistleService, pollService: PollService) => {
+      let post: Post = Post.create(whistleService, {
+        author: 'author',
+        permlink: 'permlink',
+        title: 'title',
+        body: 'body',
+        active_votes: [],
+        json_metadata: `{}`,
+      });
+      let poll = Poll.createPoll(pollService, post);
+      expect(poll.config).toEqual(POLL_DEFAULT_CONFIG);
+    }));
+
+
 });

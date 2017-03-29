@@ -1,7 +1,7 @@
 import { Post } from '../whistle/post';
 import { PollOption } from './polloption';
 import { PollService } from './poll.service';
-import { PollConfig } from './pollconfig';
+import { POLL_DEFAULT_CONFIG, POLL_CONFIG_JSON_METADATA_NAME, PollConfig} from './pollconfig';
 
 export class Poll extends Post {
   pollService: PollService;
@@ -27,8 +27,13 @@ export class Poll extends Post {
   }
 
   private _loadConfig(): void {
-    this.config = {
-      addingChoicesAllowed: this.json_metadata['poll_config'].adding_choices_allowed
-    };
+    if (this.json_metadata.hasOwnProperty(POLL_CONFIG_JSON_METADATA_NAME)) {
+      let metadata = this.json_metadata[POLL_CONFIG_JSON_METADATA_NAME];
+      this.config = {
+        addingChoicesAllowed: metadata.adding_choices_allowed
+      };
+    } else {
+      this.config = POLL_DEFAULT_CONFIG;
+    }
   }
 }
