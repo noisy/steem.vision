@@ -43,7 +43,7 @@ describe('WhistleService', () => {
 
       whistleService.getPost('noisy', 'permlink').then((response) => {
         expect(spy.calls.count()).toEqual(1);
-        expect(response).toEqual(new Post(whistleService, expectedResponse));
+        expect(response).toEqual(Post.create(whistleService, expectedResponse));
       });
     }
   )));
@@ -74,19 +74,19 @@ describe('WhistleService', () => {
       ];
 
       let expectedResponse = [
-        new Post(whistleService, {
+        Post.create(whistleService, {
           author: 'author',
           permlink: 'permlink-1',
           title: 'title-1',
           body: 'body1',
         }),
-        new Post(whistleService, {
+        Post.create(whistleService, {
           author: 'author',
           permlink: 'permlink-2',
           title: 'title-2',
           body: 'body2',
         }),
-        new Post(whistleService, {
+        Post.create(whistleService, {
           author: 'author2',
           permlink: 'permlink-3',
           title: 'title-3',

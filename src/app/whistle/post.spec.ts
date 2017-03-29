@@ -23,7 +23,7 @@ describe('Post', () => {
     [WhistleService],
     (whistleService: WhistleService) => {
 
-      let post = new Post(whistleService, {
+      let post = Post.create(whistleService, {
           author: 'author',
           permlink: 'permlink',
           title: 'title',
@@ -31,19 +31,19 @@ describe('Post', () => {
         });
 
       let expectedResponse = [
-        new Post(whistleService, {
+        Post.create(whistleService, {
           author: 'author',
           permlink: 'permlink-1',
           title: 'title-1',
           body: 'body1',
         }),
-        new Post(whistleService, {
+        Post.create(whistleService, {
           author: 'author',
           permlink: 'permlink-2',
           title: 'title-2',
           body: 'body2',
         }),
-        new Post(whistleService, {
+        Post.create(whistleService, {
           author: 'author2',
           permlink: 'permlink-3',
           title: 'title-3',

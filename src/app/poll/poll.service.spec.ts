@@ -37,10 +37,10 @@ describe('PollService', () => {
         body: 'body',
       };
 
-      let spy = spyOn(whistleService, 'getPost').and.returnValue(Promise.resolve(expectedResponse));
+      let spy = spyOn(whistleService, 'getPost').and.returnValue(Promise.resolve(Post.create(whistleService, expectedResponse)));
 
       pollService.getPoll('author', 'permlink').then(poll => {
-        expect(poll).toEqual(new Poll(new Post(whistleService, expectedResponse)));
+        expect(poll).toEqual(new Poll(Post.create(whistleService, expectedResponse)));
       });
     }
   )));
@@ -69,7 +69,7 @@ describe('PollService', () => {
     [WhistleService, PollService],
     (whistleService: WhistleService, pollService: PollService) => {
 
-      let post = new Post(whistleService, {
+      let post = Post.create(whistleService, {
         author: 'author',
         permlink: 'permlink',
         title: 'title',
@@ -77,13 +77,13 @@ describe('PollService', () => {
       });
 
       let response = [
-        new Post(whistleService, {
+        Post.create(whistleService, {
           author: 'author',
           permlink: 'permlink-1',
           title: 'title-1',
           body: 'body1',
         }),
-        new Post(whistleService, {
+        Post.create(whistleService, {
           author: 'author',
           permlink: 'permlink-2',
           title: 'title-2',
@@ -92,13 +92,13 @@ describe('PollService', () => {
       ];
 
       let expectedResponse = [
-        new PollOption(new Post(whistleService, {
+        new PollOption(Post.create(whistleService, {
           author: 'author',
           permlink: 'permlink-1',
           title: 'title-1',
           body: 'body1',
         })),
-        new PollOption(new Post(whistleService, {
+        new PollOption(Post.create(whistleService, {
           author: 'author',
           permlink: 'permlink-2',
           title: 'title-2',
@@ -119,7 +119,7 @@ describe('PollService', () => {
     [WhistleService, PollService],
     (whistleService: WhistleService, pollService: PollService) => {
 
-      let post = new Post(whistleService, {
+      let post = Post.create(whistleService, {
         author: 'author',
         permlink: 'permlink',
         title: 'title',
@@ -127,19 +127,19 @@ describe('PollService', () => {
       });
 
       let response = [
-        new Post(whistleService, {
+        Post.create(whistleService, {
           author: 'author',
           permlink: 'permlink-1',
           title: 'title-1',
           body: 'body1',
         }),
-        new Post(whistleService, {
+        Post.create(whistleService, {
           author: 'author',
           permlink: 'permlink-2',
           title: 'title-2',
           body: 'body2',
         }),
-        new Post(whistleService, {
+        Post.create(whistleService, {
           author: 'author2',
           permlink: 'permlink-3',
           title: 'title-3',

@@ -1,11 +1,10 @@
 import { PollVote } from './pollvote';
-import { Post } from '../whistle/post';
+import { IPost, Post} from '../whistle/post';
 
-export class PollOption {
-  title: string;
+export class PollOption extends Post {
   votes: PollVote[];
 
-  constructor(post: Post) {
-    this.title = post.title;
+  constructor(post: IPost) {
+    super(post);
   }
 }
