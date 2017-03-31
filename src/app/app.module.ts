@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { AmChartsModule } from 'amcharts3-angular2';
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule }     from './app-routing.module';
 import { WhistleService } from './whistle/whistle.service';
@@ -12,6 +14,7 @@ import { PollComponent } from './poll/poll.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    AmChartsModule
   ],
   declarations: [
     AppComponent,

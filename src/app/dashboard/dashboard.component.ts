@@ -5,7 +5,8 @@ import { PollService } from '../poll/poll.service';
 @Component({
   selector: 'my-dashboard',
   template: `
-    <h1>Polls</h1>
+    <h1>test</h1>
+    <h2>Polls:</h2>
     <div *ngFor="let poll of polls">
       <a [routerLink]="['/poll', poll.author, poll.permlink]">{{poll.title}}</a>
     </div>

@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 
+import { AmChartsService } from 'amcharts3-angular2';
+
 import { Poll } from '../poll/poll';
 import { PollService } from '../poll/poll.service';
 import { PollOption } from './polloption';
 import { Vote } from '../whistle/vote';
-
-declare var AmCharts: any;
 
 @Component({
   selector: 'my-poll',
@@ -19,7 +19,7 @@ declare var AmCharts: any;
       <div>{{poll.body}}</div>
       <h3>Options:</h3>
       <div *ngFor='let option of options'>{{option.body}} - {{option.active_votes.length}}</div>
-      <div id="chartdiv" style="width: 100%; height: 400px;" ></div>
+      <div id="chartdiv" style="width: 100%; height: 500px;" ></div>
     </div>
   `,
   providers: [
@@ -29,12 +29,12 @@ declare var AmCharts: any;
 export class PollComponent implements OnInit {
   poll: Poll;
   options: PollOption[] = [];
-
-  chart: any;
+  private chart: any;
 
   constructor(
     private pollService: PollService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private AmCharts: AmChartsService
   ) {}
 
   ngOnInit(): void {
@@ -55,7 +55,7 @@ export class PollComponent implements OnInit {
 
             let data = this.options.map( option => ({title: option.body, value: option.active_votes.length}));
 
-            this.chart = AmCharts.makeChart('chartdiv',
+            this.chart = this.AmCharts.makeChart('chartdiv',
               {
                 'type': 'pie',
                 'theme': 'light',
@@ -75,5 +75,9 @@ export class PollComponent implements OnInit {
           });
         });
       });
+  }
+
+  ngOnDestroy() {
+    this.AmCharts.destroyChart(this.chart);
   }
 }
