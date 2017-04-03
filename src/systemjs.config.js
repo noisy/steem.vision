@@ -29,6 +29,7 @@
 
       // 3rd-party libraries
       'amcharts3-angular2': 'node_modules/amcharts3-angular2/index.js',
+      'buffer': 'vendor/buffer.js',
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {
