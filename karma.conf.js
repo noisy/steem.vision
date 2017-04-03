@@ -74,7 +74,10 @@ module.exports = function(config) {
       { pattern: appBase + '**/*.ts', included: false, watched: false },
       { pattern: appBase + '**/*.js.map', included: false, watched: false },
       { pattern: testingSrcBase + '**/*.ts', included: false, watched: false },
-      { pattern: testingBase + '**/*.js.map', included: false, watched: false}
+      { pattern: testingBase + '**/*.js.map', included: false, watched: false},
+
+      // 3rd-party libraries
+      'node_modules/amcharts3-angular2/index.js',
     ],
 
     // Proxied base paths for loading assets

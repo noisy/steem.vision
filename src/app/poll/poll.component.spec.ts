@@ -3,10 +3,13 @@ import { PollComponent } from './poll.component';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By }           from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
+import { ActivatedRoute, Data } from '@angular/router';
+
+import { AmChartsService } from 'amcharts3-angular2';
+
 import { PollService } from '../poll/poll.service';
 import { WhistleService } from '../whistle/whistle.service';
 
-import { ActivatedRoute, Data } from '@angular/router';
 
 describe('PollComponent', function () {
   let de: DebugElement;
@@ -21,6 +24,7 @@ describe('PollComponent', function () {
       providers: [
         PollService,
         { provide: WhistleService, useValue: {}},
+        { provide: AmChartsService, useValue: {}},
         {
           provide: ActivatedRoute,
           useValue: {
@@ -31,7 +35,7 @@ describe('PollComponent', function () {
               })
             }
           }
-        }
+        },
       ]
     }).compileComponents();
   }));
