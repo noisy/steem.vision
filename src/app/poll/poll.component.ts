@@ -8,12 +8,14 @@ import { Poll } from '../poll/poll';
 import { PollService } from '../poll/poll.service';
 import { PollOption } from './polloption';
 import { Vote } from '../whistle/vote';
+import { WhistleService } from '../whistle/whistle.service';
 
 @Component({
   selector: 'my-poll',
   template: `
     <div *ngIf='poll'>
       <h1>{{poll.title}}</h1>
+      <h2> Logged in as {{author}}: {{loggedIn}}</h2>
       <p><a href="http://steemit.com/@{{poll.author}}/{{poll.permlink}}">Link to Steemit Post</a></p>
       <h3>Description:</h3>
       <div>{{poll.body}}</div>
@@ -23,7 +25,8 @@ import { Vote } from '../whistle/vote';
     </div>
   `,
   providers: [
-    PollService
+    PollService,
+    WhistleService
   ]
 })
 export class PollComponent implements OnInit {
@@ -31,13 +34,19 @@ export class PollComponent implements OnInit {
   options: PollOption[] = [];
   private chart: any;
 
+  author = '';
+  passwordOrPostingKey = '';
+  loggedIn: any = 'maybe';
+
   constructor(
     private pollService: PollService,
     private route: ActivatedRoute,
-    private AmCharts: AmChartsService
+    private AmCharts: AmChartsService,
+    private whistle: WhistleService
   ) {}
 
   ngOnInit(): void {
+    this.whistle.logIn(this.author, this.passwordOrPostingKey).then( result => this.loggedIn = result);
 
     this.route.params
       .switchMap((params: Params) => this.pollService.getPoll(params['author'], params['permlink']))

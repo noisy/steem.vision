@@ -26,4 +26,25 @@ export class WhistleService {
     // because so far there is no methods in Vote class
     return this.steemService.api.getActiveVotes(author, permlink);
   }
+
+  logIn(author: string, passwordOrWif: string) {
+    let postingPriv: string;
+
+    if (this.steemService.auth.isWif(passwordOrWif)) {
+      postingPriv = passwordOrWif;
+    } else {
+      postingPriv = this.steemService.auth.toWif(author, passwordOrWif, 'posting');
+    }
+
+    let postingPub = this.steemService.auth.wifToPublic(postingPriv);
+    return new Promise((resolve, reject) => {
+
+      this.steemService.api.getAccounts([author]).then((result: any, err: any) => {
+        let account = result[0];
+        return account.posting.key_auths[0][0];
+      }).then((posting: string) => {
+        resolve(postingPub === posting);
+      });
+    });
+  }
 }
